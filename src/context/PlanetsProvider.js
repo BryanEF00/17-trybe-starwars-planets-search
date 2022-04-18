@@ -6,6 +6,7 @@ import PlanetsContext from './PlanetsContext';
 function PlanetsProvider({ children }) {
   const [planetData, setPlanetData] = useState({
     data: [],
+    filterByName: '',
   });
 
   useEffect(() => {
@@ -17,15 +18,19 @@ function PlanetsProvider({ children }) {
     getData();
   }, []);
 
+  const filterName = (name) => {
+    setPlanetData((prevState) => ({ ...prevState, filterByName: name }));
+  };
+
   return (
-    <PlanetsContext.Provider value={ { ...planetData } }>
+    <PlanetsContext.Provider value={ { ...planetData, filterName } }>
       {children}
     </PlanetsContext.Provider>
   );
 }
 
 PlanetsProvider.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 
 export default PlanetsProvider;
