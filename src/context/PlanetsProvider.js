@@ -8,6 +8,11 @@ function PlanetsProvider({ children }) {
     data: [],
     filterByName: '',
     filterByNumericValues: [],
+    order: {
+      column: 'population',
+      sort: 'ASC',
+      active: false,
+    },
   });
 
   useEffect(() => {
@@ -45,8 +50,20 @@ function PlanetsProvider({ children }) {
     }));
   };
 
+  const filterOrder = (order) => {
+    setPlanetData((prevState) => ({
+      ...prevState,
+      order,
+    }));
+  };
+
   const context = {
-    ...planetData, filterName, filterNumeric, removeFilter, removeAllFilters,
+    ...planetData,
+    filterName,
+    filterNumeric,
+    removeFilter,
+    removeAllFilters,
+    filterOrder,
   };
 
   return (
