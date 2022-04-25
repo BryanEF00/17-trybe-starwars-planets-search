@@ -30,8 +30,29 @@ function PlanetsProvider({ children }) {
     }));
   };
 
+  const removeFilter = (id) => {
+    setPlanetData((prevState) => ({
+      ...prevState,
+      filterByNumericValues: prevState.filterByNumericValues
+        .filter(({ column }) => column !== id),
+    }));
+  };
+
+  const removeAllFilters = () => {
+    setPlanetData((prevState) => ({
+      ...prevState,
+      filterByNumericValues: [],
+    }));
+  };
+
+  const context = {
+    ...planetData, filterName, filterNumeric, removeFilter, removeAllFilters,
+  };
+
   return (
-    <PlanetsContext.Provider value={ { ...planetData, filterName, filterNumeric } }>
+    <PlanetsContext.Provider
+      value={ context }
+    >
       {children}
     </PlanetsContext.Provider>
   );

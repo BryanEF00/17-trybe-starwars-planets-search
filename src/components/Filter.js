@@ -2,7 +2,10 @@ import React, { useContext, useState } from 'react';
 import PlanetsContext from '../context/PlanetsContext';
 
 function Filter() {
-  const { filterByName, filterName, filterNumeric } = useContext(PlanetsContext);
+  const {
+    filterByName, filterName, filterNumeric, filterByNumericValues,
+    removeFilter, removeAllFilters,
+  } = useContext(PlanetsContext);
 
   const filters = {
     columns: [
@@ -27,6 +30,29 @@ function Filter() {
     filterNumeric(numericFilter);
     setColumnFilters(columnFilters.filter((filter) => filter !== numericFilter.column));
     setNumericFilter({ ...numericFilter, column: columnFilters[1] });
+  };
+
+  const handleRemove = ({ target: { id } }) => {
+    const activeFilters = filterByNumericValues.filter(({ column }) => column !== id);
+
+    if (activeFilters.length === 0) {
+      setColumnFilters(filters.columns);
+    } else {
+      const availableFilters = activeFilters.reduce((acc, currentFilter) => {
+        const { column } = currentFilter;
+
+        return acc.filter((filter) => filter !== column);
+      }, [...filters.columns]);
+
+      setColumnFilters(availableFilters);
+    }
+
+    removeFilter(id);
+  };
+
+  const handleRemoveAll = () => {
+    removeAllFilters();
+    setColumnFilters(filters.columns);
   };
 
   return (
@@ -81,6 +107,30 @@ function Filter() {
         >
           FILTRAR
         </button>
+        <button
+          data-testid="button-remove-filters"
+          type="button"
+          onClick={ handleRemoveAll }
+        >
+          REMOVER FILTROS
+        </button>
+        <div>
+          {filterByNumericValues.length > 0
+        && filterByNumericValues.map(({ column, comparison, value }) => (
+          <div data-testid="filter" key={ column }>
+            <h4>
+              {`${column} ${comparison} ${value}`}
+            </h4>
+            <button
+              type="button"
+              id={ column }
+              onClick={ handleRemove }
+            >
+              X
+            </button>
+          </div>
+        ))}
+        </div>
       </div>
     </>
   );

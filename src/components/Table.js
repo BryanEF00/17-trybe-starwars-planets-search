@@ -45,12 +45,6 @@ function Table() {
 
   return (
     <div>
-      <div>
-        {filterByNumericValues.length > 0
-        && filterByNumericValues.map(({ column, comparison, value }) => (
-          <h4 key={ column }>{`${column} ${comparison} ${value}`}</h4>
-        ))}
-      </div>
       <table>
         <thead>
           <tr>
